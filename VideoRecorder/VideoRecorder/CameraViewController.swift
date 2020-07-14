@@ -51,8 +51,17 @@ class CameraViewController: UIViewController {
             
             playerView.frame = topRect
             view.addSubview(playerView)
+            
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(playRecording(_:)))
+            playerView.addGestureRecognizer(tapGesture)
         }
         
+    }
+    
+    @IBAction func playRecording(_ sender: UITapGestureRecognizer) {
+        guard sender.state == .ended else { return }
+        
+        player.seek(to: CMTime(seconds: 0, preferredTimescale: 600))
         player.play()
         
     }
@@ -127,6 +136,8 @@ class CameraViewController: UIViewController {
             fileOutput.startRecording(to: newRecordingURL(), recordingDelegate: self)
         }
 	}
+    
+
 	
 	/// Creates a new file URL in the documents directory
 	private func newRecordingURL() -> URL {
